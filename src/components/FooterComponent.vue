@@ -7,9 +7,17 @@
 
         <div class="footer-middle">
             <div class="left">
-                <ul>
-                    <li v-for="({ name, link }, index) in nav" :key="index">
+                <ul class="parent">
+                    <li v-for="({ name, link, child }, index) in nav" :key="index">
                         <a :href="link">{{ name }}</a>
+                        <div v-if="child.length > 0">
+                            <ul class="child">
+                                <li v-for="({ childName, childLink }, i) in child" :key="i">
+                                    <router-link :to="{ path: '/home', hash: childLink }">{{ childName }}</router-link>
+                                    <!-- <a :href= 'childLink'  @click="handleClick()">{{ childName }}</a> -->
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
 
@@ -37,7 +45,21 @@
 </template>
 
 <script setup>
-
+import { ref } from 'vue'
+const nav = ref([
+    {
+        name: '关于我们', link: '/aboutus', child: [{ childName: '风采', childLink: '#fc' }, { childName: '面貌', childLink: '#mm' }]
+    },
+    {
+        name: '新闻资讯', link: '/home', child: []
+    },
+    {
+        name: '产品服务', link: '/home', child: []
+    },
+    {
+        name: '联系我们', link: '/home', child: []
+    }
+])
 </script>
 
 <style scoped>
@@ -84,7 +106,37 @@
     justify-content: space-around;
 
     .left {
-        width: 200px;
+        .parent {
+            display: flex;
+
+            li {
+                width: 168px;
+                height: 49px;
+                font-family: 'Arial Negreta', 'Arial Normal', 'Arial', sans-serif;
+                font-weight: 700;
+                font-size: 20px;
+                color: #FEFEFE;
+            }
+        }
+
+        .child {
+            display: block;
+
+            li {
+                width: 72px;
+                height: 49px;
+                display: flex;
+                font-family: 'Arial Negreta', 'Arial Normal', 'Arial', sans-serif;
+                font-weight: 700;
+                font-style: normal;
+                font-size: 16px;
+                color: rgba(254, 254, 254, 0.588235294117647);
+            }
+
+        }
+
+
+        /* width: 200px; */
     }
 
     ;

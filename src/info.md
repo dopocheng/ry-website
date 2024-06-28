@@ -15,3 +15,63 @@ rules: {//添加忽略信息
 # 旋转个角度（css）
 transform: rotate(-45deg);
 # 通常支持的格式包括 MP4、WebM 和 Ogg。
+# 跳转到页面指定锚点位置
+一、触发和跳转在同一页面
+1.要跳转的页面设置锚点 <section id="fc"></section>
+css:
+section {
+    padding-top: 122px;
+    /* 这个值应等于或大于你的 header 高度 */
+    margin-top: -122px;
+    /* 同样的值但为负 */
+}
+触发的链接：
+<ul class="child">
+  <li v-for="({ childName, childLink }, i) in child" :key="i">
+      <a :href= 'childLink'  @click="handleClick()">{{ childName }}</a> 
+  </li>
+</ul>
+
+2.使用 JavaScript 进行平滑滚动
+<ul>
+  <li><a href="#" @click="scrollToSection('showcase')">风采</a></li>
+  <!-- 其他页脚链接 -->
+</ul>
+js：
+scrollToSection(sectionId) {
+  const element = document.getElementById(sectionId);//锚点视口高
+  const headerOffset = document.querySelector('.header').offsetHeight;
+  const elementPosition = element.getBoundingClientRect().top;//窗口高
+  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  //减去固定的 header 高度
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth'//平滑移动
+  });
+}
+二、触发和锚点不在同一页面（router-link ）
+触发：
+<ul class="child">
+  <li v-for="({ childName, childLink }, i) in child" :key="i">
+      <router-link :to="{ path: '/home', hash: childLink }">{{ childName }}</router-link>
+  </li>
+</ul>
+路由：routes index.js
+scrollBehavior(to, from, savedPosition) {
+  if (to.hash) {
+    const header = document.querySelector('.header');
+    const headerOffset = header ? header.offsetHeight : 0;
+    const element = document.querySelector(to.hash);
+    console.log('hash---', element)
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerOffset;
+
+      return window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+  return { x: 0, y: 0 };
+}

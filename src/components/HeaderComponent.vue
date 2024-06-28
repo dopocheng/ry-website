@@ -35,7 +35,7 @@ const nav = ref([
         name: '在线商城', link: '/home'
     },
     {
-        name: '关于我们', link: '/home'
+        name: '关于我们', link: '/aboutus'
     },
     {
         name: '联系我们', link: '/home'
