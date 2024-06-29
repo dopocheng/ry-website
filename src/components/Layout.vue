@@ -8,8 +8,10 @@ import FooterComp from './FooterComponent.vue'
         <HeaderComp class="header" />
         <router-view class="content" />
         <FooterComp class="footer" />
-    </div>
-</template>
+        <el-backtop :right="100" :bottom="100" />
+        <BackTop :right="40" :bottom="160"/>
+      </div>
+    </template>
 
 <style scoped>
 .layout {

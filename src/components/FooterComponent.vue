@@ -40,7 +40,15 @@
             </div>
         </div>
 
-        <div class="footer-bottom"></div>
+        <div class="footer-bottom">
+            <div>本站涵盖的内容、图片、视频等模板演示数据，如有涉及侵犯版权，请联系我们提供书面反馈，我们核实后会立即删除</div>
+            <div>本网站内所有照片、视频、文字等资料信息，未经我司授权使用的任何公司、企业、个人等，我司会追究相关法律责任，请多理解。</div>
+            <div class="bq">Copyright © 2024 | 版权所有 : 睿鹰时空（江苏）科技股份有限公司 | 苏ICP备xxxxxxxx</div>
+            <div class="fw">
+                <div>今日访问:<span>10241</span></div>
+                <div>总访问量:<span>222222</span></div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -48,10 +56,10 @@
 import { ref } from 'vue'
 const nav = ref([
     {
-        name: '关于我们', link: '/aboutus', child: [{ childName: '风采', childLink: '#fc' }, { childName: '面貌', childLink: '#mm' }]
+        name: '关于我们', link: '/aboutus', child: [{ childName: '公司简介', childLink: '#gsjj' }, { childName: '荣誉资质', childLink: '#ryzz' }, { childName: '企业文化', childLink: '#qywh' }, { childName: '合作伙伴', childLink: '#hzhb' }]
     },
     {
-        name: '新闻资讯', link: '/home', child: []
+        name: '新闻资讯', link: '/home', child: [{ childName: '公司新闻', childLink: '#gsxw' }, { childName: '行业新闻', childLink: '#hyxw' }]
     },
     {
         name: '产品服务', link: '/home', child: []
@@ -106,6 +114,9 @@ const nav = ref([
     justify-content: space-around;
 
     .left {
+        height: 125px;
+        margin-right: -175px;
+
         .parent {
             display: flex;
 
@@ -124,7 +135,7 @@ const nav = ref([
 
             li {
                 width: 72px;
-                height: 49px;
+                height: 30px;
                 display: flex;
                 font-family: 'Arial Negreta', 'Arial Normal', 'Arial', sans-serif;
                 font-weight: 700;
@@ -178,5 +189,47 @@ const nav = ref([
     }
 
     ;
+}
+
+.footer-bottom {
+    width: 100%;
+    height: 133px;
+    background-color: rgba(7, 81, 169, 0.996078431372549);
+
+    div {
+        /* height: 25px; */
+        padding: 2px 2px 2px 2px;
+        font-family: 'Arial Normal', 'Arial', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 16px;
+        letter-spacing: normal;
+        color: #F7F7F7;
+        text-align: center;
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    .bq {
+        font-weight: 400;
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.592156862745098);
+
+    }
+
+    .fw {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: space-evenly;
+
+        span {
+            font-size: 22px;
+            color: #F8E306;
+
+
+        }
+    }
 }
 </style>
