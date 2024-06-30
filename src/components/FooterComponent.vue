@@ -1,8 +1,19 @@
 <template>
     <div class="footer">
         <div class="footer-top">
-            <div>合作伙伴</div>
-            <img src="../assets/images/home/u33.png" alt="">
+            <div class="partner-title">合作伙伴</div>
+            <div class="partner-img">
+                <ul>
+                    <li v-for="({ img, name }, index) in displayPartners" :key="index">
+                        <!-- <img :src="'../assets/images/public/' + img + '.jpg'" alt="">getImagePath -->
+                        <img :src=getImagePath(img) alt="">
+                        <span> {{ name }}</span>
+                    </li>
+                    <div v-if="showBtton"><span @click="showMore">更多...</span></div>
+                </ul>
+                <!-- <el-button v-if="showBtton" @click="showMore">跟很多</el-button> -->
+            </div>
+            <!-- <img src="../assets/images/home/u33.png" alt=""> -->
         </div>
 
         <div class="footer-middle">
@@ -23,7 +34,14 @@
 
             </div>
             <div class="middle">
-                <QRCode value="https://fanyi.baidu.com/mtpe-individual/multimodal?query=Partners&lang=zh2en" />
+                <div class="qrcode-v">
+                    <qrcode-vue value="https://fanyi.baidu.com/mtpe-individual/multimodal?query=Partners&lang=zh2en"
+                        :size="200" />
+                    <div>
+                        <img src="../assets/images/home/u148.svg" class="overlay-image" alt="Overlay Image" />
+                    </div>
+                </div>
+                <!-- <QRCode value="https://fanyi.baidu.com/mtpe-individual/multimodal?query=Partners&lang=zh2en" /> -->
                 <!-- <img src="../assets//images/home/u19.svg" alt=""> -->
                 <div class="wx-code">微信公众号</div>
             </div>
@@ -53,7 +71,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import QrcodeVue from 'qrcode.vue';
+import { computed, ref } from 'vue'
+const initDisplayCount = ref(10)
+const partners = ref([{ img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }, { img: 'jlkj', name: '金陵科技大学' }, { img: 'njny', name: '南京农业大学' }, { img: 'njlg', name: '南京理工大学' }, { img: 'tgqm', name: '泰国清迈大学' }, { img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }, { img: 'jlkj', name: '金陵科技大学' }, { img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }, { img: 'jlkj', name: '金陵科技大学' }, { img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }, { img: 'jlkj', name: '金陵科技大学' }, { img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }, { img: 'jlkj', name: '金陵科技大学' }, { img: 'hw', name: '华为' }, { img: 'njyd', name: '南京邮电大学' }])
 const nav = ref([
     {
         name: '关于我们', link: '/aboutus', child: [{ childName: '公司简介', childLink: '#gsjj' }, { childName: '荣誉资质', childLink: '#ryzz' }, { childName: '企业文化', childLink: '#qywh' }, { childName: '合作伙伴', childLink: '#hzhb' }]
@@ -68,6 +89,21 @@ const nav = ref([
         name: '联系我们', link: '/home', child: []
     }
 ])
+
+
+const displayPartners = computed(() => {//要显示的个数
+    return partners.value.slice(0, initDisplayCount.value)
+})
+const showMore = () => {
+    initDisplayCount.value += 5//每次再显示5条
+}
+const showBtton = computed(() => {//大于总条数,隐藏按钮
+    return initDisplayCount.value < partners.value.length
+})
+
+const getImagePath = (img) => {
+    return new URL(`../assets/images/public/${img}.jpg`, import.meta.url).href;
+};
 </script>
 
 <style scoped>
@@ -91,7 +127,7 @@ const nav = ref([
     margin-top: 30px;
     flex-direction: column;
 
-    div {
+    .partner-title {
         width: 207px;
         height: 91px;
         font-weight: 700;
@@ -101,6 +137,44 @@ const nav = ref([
     img {
         width: 100%;
         height: 794px;
+    }
+}
+
+.partner-img {
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+
+        div {
+            font-size: 23px;
+            display: flex;
+            width: 200px;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                text-align: center;
+                height: 40px;
+                width: 80px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 200px;
+    }
+
+    img {
+        width: 120px;
+        height: 120px;
+    }
+
+    span {
+        font-size: 23px;
     }
 }
 
@@ -153,7 +227,21 @@ const nav = ref([
     ;
 
     .middle {
+
         text-align: center;
+
+        .qrcode-v {
+            position: relative;
+            display: inline-block;
+        }
+
+        canvas {
+            background-color: #eee;
+            padding: 5px;
+            width: 100px !important;
+            height: 100px !important;
+            border-radius: 10px;
+        }
 
         .m-qrcode.bordered {
             width: 100px !important;
@@ -168,6 +256,19 @@ const nav = ref([
             font-weight: 400;
             font-size: 13px;
             color: #FEFEFE;
+        }
+
+        .overlay-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            /* Adjust size as needed */
+            height: 10px;
+            /* Adjust size as needed */
+            transform: translate(-50%, -50%);
+            background-color: #eee;
+
         }
     }
 

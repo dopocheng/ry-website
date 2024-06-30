@@ -75,3 +75,26 @@ scrollBehavior(to, from, savedPosition) {
   }
   return { x: 0, y: 0 };
 }
+# 动态拼接url
+<ul>
+    <li v-for="({ img, name }, index) in partners" :key="index">
+      <img :src="getImagePath(img)" alt="">
+      <span>{{ name }}</span>
+    </li>
+  </ul>
+  const partners = ref([
+      { img: 'hw', name: '华为' },
+      { img: 'njyd', name: '南京邮电大学' }
+    ]);
+
+    const getImagePath = (img) => {
+      return new URL(`../assets/images/public/${img}.jpg`,import.meta.url).href;
+    };
+直接拼接找不到图片
+原因:路径问题：
+相对路径可能无法正确解析，尤其是在使用 Webpack 或 Vite 等模块捆绑器时，它们需要以特定方式处理资产路径。
+
+构建过程：
+在构建过程中，静态资产的相对路径可能会发生变化。使用require或import.meta.url可确保正确解析路径。
+# 二维码中间的图片不能超过二维码的30%
+有没异型二维码中间是空的
