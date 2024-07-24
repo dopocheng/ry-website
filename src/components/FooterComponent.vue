@@ -24,7 +24,8 @@
                         <div v-if="child.length > 0">
                             <ul class="child">
                                 <li v-for="({ childName, childLink }, i) in child" :key="i">
-                                    <router-link :to="{ path: '/home', hash: childLink }">{{ childName }}</router-link>
+                                    <router-link :to="{ path: '/aboutus', hash: childLink }">{{ childName
+                                        }}</router-link>
                                     <!-- <a :href= 'childLink'  @click="handleClick()">{{ childName }}</a> -->
                                 </li>
                             </ul>
@@ -61,7 +62,7 @@
         <div class="footer-bottom">
             <div>本站涵盖的内容、图片、视频等模板演示数据，如有涉及侵犯版权，请联系我们提供书面反馈，我们核实后会立即删除</div>
             <div>本网站内所有照片、视频、文字等资料信息，未经我司授权使用的任何公司、企业、个人等，我司会追究相关法律责任，请多理解。</div>
-            <div class="bq">Copyright © 2024 | 版权所有 : 睿鹰时空（江苏）科技股份有限公司 | 苏ICP备xxxxxxxx</div>
+            <div class="bq">Copyright © 2024 | 版权所有 : 睿鹰时空（江苏）科技股份有限公司 | 苏ICP备2024111909号-1</div>
             <div class="fw">
                 <div>今日访问:<span>10241</span></div>
                 <div>总访问量:<span>222222</span></div>

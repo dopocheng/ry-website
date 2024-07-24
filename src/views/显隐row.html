@@ -1,0 +1,68 @@
+<template>
+    <div>
+        <h2>Visible Table</h2>
+        <el-table :data="visibleTableData">
+            <el-table-column prop="date" label="Date" width="180" />
+            <el-table-column prop="name" label="Name" width="180" />
+            <el-table-column prop="address" label="Address" />
+            <el-table-column label="Actions">
+                <template v-slot="scope">
+                    <el-button @click="hideRow(scope.row)">Hide</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <h2 style="margin-top: 20px;">Hidden Table</h2>
+        <el-table :data="hiddenTableData">
+            <el-table-column prop="date" label="Date" width="180" />
+            <el-table-column prop="name" label="Name" width="180" />
+            <el-table-column prop="address" label="Address" />
+            <el-table-column label="Actions">
+                <template v-slot="scope">
+                    <el-button @click="showRow(scope.row)">Show</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                tableData: [
+                    { date: '2016-05-02', name: 'Tom', address: 'No. 189, Grove St, Los Angeles' },
+                    { date: '2016-05-04', name: 'John', address: 'No. 189, Grove St, Los Angeles' },
+                    { date: '2016-05-01', name: 'Tom', address: 'No. 189, Grove St, Los Angeles' },
+                    { date: '2016-05-03', name: 'John', address: 'No. 189, Grove St, Los Angeles' }
+                ],
+                hiddenRows: []
+            };
+        },
+        computed: {
+            visibleTableData() {
+                return this.tableData.filter(row => !this.hiddenRows.includes(row));
+            },
+            hiddenTableData() {
+                return this.hiddenRows;
+            }
+        },
+        methods: {
+            hideRow(row) {
+                this.hiddenRows.push(row);
+            },
+            showRow(row) {
+                const index = this.hiddenRows.indexOf(row);
+                if (index !== -1) {
+                    this.hiddenRows.splice(index, 1);
+                }
+            }
+        }
+    };
+</script>
+
+<style scoped>
+    .el-table {
+        width: 100%;
+    }
+</style>
