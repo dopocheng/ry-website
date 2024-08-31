@@ -199,3 +199,152 @@ readonlyFlay.value = false
 }
 
 # el-tree 点击下拉三角背景变成白色
+
+this.items = dataFromBackend.map(item => {
+return {
+...item,
+customProperty: 'My Custom Value', // 自定义属性
+};
+});
+
+# 如何清空computed对象数据
+
+假设你有一个 computed 属性依赖于某个响应式数据，那么你可以通过修改这个响应式数据来达到清空 computed 属性的效果
+computedValue() {
+return this.inputValue ? this.inputValue : 'No data';
+}
+clearComputed() {
+this.inputValue = '';
+}
+
+# 居中
+
+height: 32px; line-height: 32px;（思考：垂直方向不是绝对居中）
+此方法适用于单行文本。line-height等于的属性height将使文本在元素内垂直居中。
+但是，这种方法不能处理水平居中，也不适用于多行文本。
+display: flex; justify-content: center; align-items: center;：
+这种方法更加灵活，它使内容在垂直和水平方向上居中。
+它适用于单行和多行文本以及其他内联或块元素。
+Flexbox 更加健壮，可以更优雅地处理复杂的布局
+
+# vue2 父子孙数据响应传递
+
+1.父 ->子：props -> 孙：props
+孙：emit ->子：emit ->父
+2.bus 总线
+父：EventBus.$on 孙：EventBus.$emit
+3.vueX
+
+# vue2 父子孙数据非响应传递
+
+this.$parent/this.$children
+在 Vue 2 中，this.$children 是指当前组件的直接子组件的数组。可以通过这个属性访问子组件的方法和数据。然而，直接使用 this.$children 进行父子组件通信并不是推荐的做法，因为它会导致组件之间的强耦合，降低组件的可维护性和复用性
+为什么不推荐使用 this.$children
+不稳定的索引：this.$children 返回的是一个数组，数组中子组件的顺序不一定是固定的，容易出错。
+强耦合：父组件需要知道子组件的具体实现细节，导致组件之间的依赖关系过于紧密。
+难以维护：随着项目的复杂度增加，直接操作子组件会使代码变得难以维护和调试
+
+# cesium BoundingSphere
+
+BoundingSphere 是一种用于表示空间中一组点的最小包围球的几何结构。在 Cesium 中，BoundingSphere 通常用于计算一组点或一个对象的中心位置和范围，以便相机能够飞到并包含整个对象。
+BoundingSphere 有以下几个主要属性：
+center: 表示球的中心点，通常是 Cartesian3 坐标。
+radius: 表示球的半径，通常是以米为单位的浮点数。
+
+# elment select 下拉框背景颜色修改
+
+.el-select-dropdown.el-popper //下拉框 border 属性修改、背景颜色、输入框文字颜色
+.el-select-dropdown\_\_item//文字颜色
+.el-select-dropdown\_\_item.hover//选中行背景
+.el-select-dropdown\_\_item:hover//hover 当前
+
+# 日期范围样式
+
+.el-picker-panel.el-date-range-picker.el-popper//日期下拉背景
+
+.el-date-table td.end-date div,
+.el-date-table td.in-range div
+.el-date-table td.start-date div//选中日期样式
+.el-date-editor .el-range\_\_icon//日期icon
+.el-range-editor .el-range-input//输入框回显日期样式
+# b != null
+undefiend null（只拦击这俩 不拦截[]）
+# 逻辑运算符 b ?? false
+拦截 '' 0 undefiend null (不拦截[])
+# undefiend null []
+if (Array.isArray(variable) && variable.length > 0) {
+    // variable 也不是空数组
+} 
+# 读取配置文件
+const fs = require('fs');
+const path = require('path');
+
+// 读取配置文件
+const configPath = path.resolve(__dirname, 'src/assets/config.json');
+let config;
+
+try {
+  const rawConfig = fs.readFileSync(configPath);
+  config = JSON.parse(rawConfig);
+} catch (error) {
+  console.error('Error reading the config file:', error);
+  config = { ip: 'localhost', port: 8080 }; // 设置默认值
+}
+
+module.exports = {
+  devServer: {
+    host: '0.0.0.0', // 绑定到所有网络接口
+    port: config.port || 8080, // 使用JSON配置文件中的端口
+    open: true, // 自动打开浏览器
+    public: `${config.ip}:${config.port}`, // 使用JSON配置文件中的IP和端口
+  }
+};
+# 在config.js 获取本地ip
+import { defineConfig } from 'vite';
+import os from 'os';
+
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  let localIP = '127.0.0.1'; // 默认返回localhost
+
+  for (const interfaceName in interfaces) {
+    const iface = interfaces[interfaceName];
+    
+    if (interfaceName.includes('VMware') || interfaceName.includes('VirtualBox')) {
+      continue;
+    }
+
+    for (const alias of iface) {
+      if (alias.family === 'IPv4' && !alias.internal) {
+        localIP = alias.address;
+        if (interfaceName.includes('WLAN') || interfaceName.includes('Wi-Fi')) {
+          return alias.address;
+        }
+      }
+    }
+  }
+
+  return localIP;
+}
+
+const localIP = getLocalIP();
+
+export default defineConfig({
+  define: {
+    'import.meta.env.VITE_LOCAL_IP': JSON.stringify(localIP),
+  },
+  server: {
+    host: localIP,
+    port: 3000,
+    open: true,
+  },
+});
+这种方式错误
+define: {
+  'import.meta.env': {//注入到环境变量
+    VITE_LOCAL_IP: JSON.stringify(localIP),
+  },
+},
+因为这种配置方式并未实际替换 import.meta.env 对象的内容，只是试图将整个对象替换为指定的值，这样会导致无法正确访问到 VITE_LOCAL_IP 变量。
+
+

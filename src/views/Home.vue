@@ -1,6 +1,5 @@
 <template>
     <div class="home-container ">
-
         <ul class="right-button">
             <li><img src="../assets/images/home/u145.svg" alt=""></li>
             <li>
@@ -88,8 +87,6 @@ import QrcodeVue from 'qrcode.vue';
 // import alData from '@/assets/images/home/content-3/anli.json'
 let jsonData = ref(null)
 onMounted(async () => {
-
-
     const container = document.getElementById('content-4');
     const image = document.getElementById('image');
     console.log(container, image)
